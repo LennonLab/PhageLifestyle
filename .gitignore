@@ -1,0 +1,68 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+.Ruserdata
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio files
+.Rproj.user/
+.Rproj
+.Rproj.user/*
+.Rproj.user/shared_notebooks/
+.Rproj.user/persistent-state
+.Rproj.user/sources/
+
+# Produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# OAuth2 tokens
+*.httr-oauth
+
+# knitr and R markdown default cache and temporary files
+*_cache/
+cache/
+*.utf8.md
+*.knit.md
+
+###old files stored in my archive that don't need to be sent to github
+*/archive/*
+zz_archive/*
+
+# Temporary files created by R
+.Rout
+.Rout.save
+.Rout.fail
+*.out
+*.log
+*.html
+
+# Mac and Linux hidden files
+
+.Trashes
+*.swp
+*~
+*.DS_Store
+
+# Package build directories
+.Rcheck/
+.Rbuildignore
+
+### new 03_func data files that are too large
+#03_func/inphared/03_inph_raw/*
+#03_func/03_metadata/*
+03_func/03_func_data/archive/
+00_data/03_func_data/archive/complete_functional_data.csv
+00_data/03_func_data/archive/DRAM_all.csv
+**/archive/
+zz_archive/
+**/archive_incomplete/
+
