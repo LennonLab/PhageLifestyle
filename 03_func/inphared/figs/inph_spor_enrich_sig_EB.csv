@@ -1,0 +1,24 @@
+gene_name2,Class,Stage
+abrB,Sporulation Initiation,Starvation
+lexA,DNA Repair,Unknown
+parA,Partitioning,Commitment
+sigH,Sporulation Initiation,Initiation
+spoIIIE,Partitioning,Commitment
+spoVG,Sporulation Initiation,Initiation
+ylaK,Unknown,Commitment
+cwlH,Mother Cell Lysis,Mother Cell Lysis
+cwlC,Mother Cell Lysis,Mother Cell Lysis
+ligD,DNA Repair,Unknown
+polA,DNA Repair,Unknown
+XerD,Partitioning,Unknown
+PhoH,Unknown,Unknown
+rsfA,Sigma Regulator,Commitment/Engulfment
+rapA,Sporulation Initiation,Initiation
+rapK,Sporulation Initiation,Initiation
+spoIVCA,Sigma Regulator,Commitment
+sspC,DNA Protection,Engulfment
+ycgL,Unknown,Engulfment
+endolysin,Unknown Lysis,Lysis
+yhbH,Unknown,Commitment
+fenA,DNA Protection,Engulfment
+lytD,Unknown Lysis,Lysis

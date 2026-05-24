@@ -1,0 +1,3 @@
+"#phrog","Domain","#MS","#colMSA","#prot","#annot","Phrog_annot","Phrog_cat","RefSeq","pfam","KEGG","GO"
+"phrog_6810","Bacteria:17","189","190","17","1","spore coat protein","head and packaging","hypothetical protein [n=1]; protei…","PF05263.10&DUF722 ; Protein of…","NA","NA"
+"phrog_8268","Bacteria:14","190","194","14","2","spore protease","other","hypothetical protein [n=2]; Spore …","PF06866.10&DUF1256 ; Protein o…","NA","GO:0009847 spore germination !!!GO…"

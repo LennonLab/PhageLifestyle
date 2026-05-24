@@ -1,0 +1,1169 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+
+library(tidyverse)
+library(dplyr)
+library(here)
+library(cowplot)
+library(emmeans)
+library(lme4)
+library(lmerTest)
+library(ggplot2) 
+
+pal2 <- c("#015b58", "#5962b5")
+pal2.flip <- c("#5962b5", "#015b58")
+
+dr_here()
+### load complete virus data
+
+df <- read.csv(here("00_data", "01_desc", "CompleteMetadata.csv"), row.names=1)
+
+df <- subset(df, df$dataset=="INPHARED" | df$dataset=="UHGV")
+
+df <- subset(df, df$checkv_quality=="Complete" )#| df$checkv_quality=="High-quality" )
+
+df$genome.log <- log10(df$contig_length)
+df$gene.log <- log10(df$gene_count)
+
+df.bac <- subset(df, df$Bacillota=="Bacillota")
+
+
+bac.stat <- read.csv(here("00_data", "01_desc", "metadata", "NCBI", "SummaryStatsBacillotaGenomes.csv"), row.names=1)
+
+bac.stat <- select(bac.stat, gtdb_f, host.genome.length, host.gene.count, host.GC)
+
+
+df.bac <- merge(df.bac, bac.stat, by="gtdb_f", all.x=TRUE, all.y=FALSE)
+df.bac[is.na(df.bac)] <- 0
+
+df.bac.stats <- subset(df.bac, df.bac$host.GC!=0)
+
+df.bac.stats$phage.pl <- df.bac.stats$genome.log / df.bac.stats$gene.log
+
+df.bac.stats$phage.gvg <- df.bac.stats$contig_length / df.bac.stats$gene_count
+df.bac.stats$host.gvg <- df.bac.stats$host.genome.length / df.bac.stats$host.gene.count
+
+df.bac.stats$host.pl <- log10(df.bac.stats$host.genome.length) / log10(df.bac.stats$host.gene.count)
+
+df.bac.stats$pl.ratio <- df.bac.stats$phage.pl/df.bac.stats$host.pl
+
+df.bac.stats$gc.dif.abs <- abs(df.bac.stats$GC - df.bac.stats$host.GC)
+df.bac.stats$gc.dif <- df.bac.stats$GC - df.bac.stats$host.GC
+
+df.bac.stats$gc.prop <- df.bac.stats$GC / df.bac.stats$host.GC
+```
+###
+
+```{r}
+
+### contig length
+library(ggpubr)
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = contig_length)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle")
+
+ggplot(df.bac.stats, aes(x = contig_length, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = .01) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("phage coding density / host coding density") + xlab("") + ggtitle("Phage Coding Density / Host Coding Density") + labs(fill="Lifestyle") + facet_wrap(~lifestyle, ncol=1)
+
+
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = .01) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1) of \nPhage Coding Density / Host Coding Density")+ facet_wrap(~lifestyle , ncol = 1) + xlab ("phage coding density / host coding density")
+
+wilcox.test(
+  df.bac.stats$pl.ratio[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == TRUE],
+  df.bac.stats$pl.ratio[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == FALSE],
+  alternative = "two.sided",
+  exact = FALSE
+)
+
+wilcox.test(
+  df.bac.stats$contig_length[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == TRUE],
+  df.bac.stats$contig_length[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == FALSE],
+  alternative = "two.sided",
+  exact = FALSE
+)
+
+```
+
+
+gc correlation
+
+```{r}
+
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle")+ facet_wrap(~dataset , ncol = 1)
+
+library(ggpubr)
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+
+
+
+library(ggpubr)
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)  + facet_wrap(~dataset, nrow=1)
+
+
+
+library(ggpubr)
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = contig_length)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)  + facet_wrap(~dataset, nrow=1)
+
+library(ggpubr)
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = contig_length)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1) 
+
+
+
+ ggplot(df.bac.stats, aes(host.pl, phage.pl, fill=phage_spor_host, colour = phage_spor_host)) +
+  geom_point() + geom_smooth(method="lm") + facet_wrap(~lifestyle , ncol = 1)+
+ stat_regline_equation(aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~~")),
+                        label.x.npc = "middle", label.y.npc = "top" )
+
+ ggplot(df.bac.stats, aes(phage.gvg, host.gvg, fill=phage_spor_host, colour = phage_spor_host)) +
+  geom_point() + geom_smooth(method="lm") + facet_wrap(~lifestyle , ncol = 1)+
+ stat_regline_equation(aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~~")),
+                        label.x.npc = "middle", label.y.npc = "top" )
+ 
+ 
+ ggplot(test, aes(x = factor(spor), fill = factor(spor), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)  + facet_wrap(~dataset, nrow=1)
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1) 
+
+```
+
+### gc difference to host
+
+```{r}
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = gc.prop)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +   xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = gc.dif)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +   xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+ggplot(df.bac.stats, aes(x = gc.dif, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 2) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = gc.dif.abs)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+
+
+ggplot(df.bac.stats, aes(x = gc.dif.abs, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 2) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+
+
+test <- subset(df.bac.stats, df.bac.stats$dataset!="GSV")
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = .01) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+ggplot(test, aes(x = pl.ratio, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = .01) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+ks.test(
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Temperate" & df.bac.stats$f_spor == TRUE],
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Temperate" & df.bac.stats$f_spor == FALSE])
+
+
+wilcox.test(
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Temperate" & df.bac.stats$f_spor == TRUE],
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Temperate" & df.bac.stats$f_spor == FALSE],
+  alternative = "two.sided",
+  exact = FALSE
+)
+
+
+
+
+
+
+ks.test(
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == TRUE],
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == FALSE], alternative="less")
+
+wilcox.test(
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == TRUE],
+  df.bac.stats$gc.dif[df.bac.stats$lifestyle == "Lytic" & df.bac.stats$f_spor == FALSE],
+  alternative = "two.sided",
+  exact = FALSE
+)
+
+ks.test(
+  inph$Genome.Length..bp.[inph$lifestyle == "Lytic" & inph$f_spor == TRUE],
+  inph$Genome.Length..bp.[inph$lifestyle == "Lytic" & inph$f_spor == FALSE]) #, alternative="less"
+
+ks.test(
+  inph$Genome.Length..bp.[inph$lifestyle == "Temp" & inph$f_spor == TRUE],
+  inph$Genome.Length..bp.[inph$lifestyle == "Temp" & inph$f_spor == FALSE], alternative="less")
+
+
+
+
+```
+
+
+
+
+
+### compare genome length & size
+```{r}
+ggplot(df.bac, aes(x = factor(spor), fill = factor(spor), y = genome.log)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("PL ratio") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = spor)) +
+  geom_density(alpha = 0.4) + facet_wrap(~lifestyle, ncol=1)
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = spor)) +
+  geom_histogram(
+    aes(y = after_stat(count / sum(count))),
+    bins = 30,
+    position = "identity",
+    alpha = 0.4
+  ) +
+  facet_wrap(~ lifestyle, ncol = 1) +
+  ylab("Proportion")
+
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = gc.dif)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+ggplot(df.bac.stats, aes(x = factor(spor), fill = factor(spor), y = gc.dif.abs)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+
+ggplot(df.bac.stats, aes(x = gc.dif.abs, fill = spor)) +
+  geom_density(alpha = 0.4) + facet_wrap(~lifestyle, ncol=1)
+
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = spor)) +
+  geom_density(alpha = 0.4) + facet_wrap(~lifestyle, ncol=1)
+
+
+ggplot(df.bac.stats, aes(x = gc.dif, fill = phage_spor_host)) +
+  geom_density(alpha = 0.4) + facet_wrap(~lifestyle, ncol=1)
+
+
+
+ggplot(df.bac.stats, aes(x = gc.dif, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 2) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+
+
+
+ ggplot(df.bac, aes(x = factor(spor), fill = factor(spor), y = gene_count)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~lifestyle , ncol = 1)
+
+
+```
+
+```{r}
+
+
+
+ggplot(df.bac.stats, aes(x = gc.dif, fill = phage_spor_host, group = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(count / sum(count))), 
+                 alpha = 0.5, position = "dodge", binwidth = 4) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(y = "Percent within Group", title = "Independent Proportions")+ facet_wrap(~lifestyle , ncol = 1)
+
+
+ggplot(df.bac.stats, aes(x = gc.dif, fill = spor)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 0.5) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Distribution (Density) of Phage - Host GC% Differences")+ facet_wrap(~lifestyle , ncol = 1) +xlab("Phage - Host GC% Difference") +ylab("Density")
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "GCDif_Distrib.png"))
+
+
+ggplot(df.bac.stats, aes(x = gc.dif.abs, fill = spor)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 alpha = 0.5, position = "identity", binwidth = 0.25) +
+  geom_density(alpha = 0.2) +
+  scale_fill_manual(values = rev(scales::hue_pal()(2))) +
+  labs(title = "Distribution (Density) of Absolute Phage - Host GC% Differences") +
+  facet_wrap(~lifestyle, ncol = 1) +
+  xlab("Absolute Phage - Host GC% Difference") +
+  ylab("Density")
+
+
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "AbsGCDif_Distrib.png"))
+
+```
+
+
+```{r}
+
+
+
+
+ggplot(df.bac.stats, aes(x = gc.dif.abs, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 0.5) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+ggplot(df.bac.stats, aes(x = gc.dif.abs, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 2) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")
+
+
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 3) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1)
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = phage_spor_host, group = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(count / sum(count))), 
+                 alpha = 0.5, position = "dodge", binwidth = .05) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(y = "Percent within Group", title = "Independent Proportions")+ facet_wrap(~lifestyle , ncol = 1)
+
+
+ggplot(df.bac.stats, aes(x = pl.ratio, fill = phage_spor_host)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 alpha = 0.5, position = "identity", binwidth = 2) +
+  geom_density(alpha = 0.2) +
+  labs(title = "Independent Densities (Each Species Area = 1)")+ facet_wrap(~lifestyle , ncol = 1) 
+
+```
+
+```{r}
+
+ggplot(df.bac, aes(x = factor(phage_spor_host), fill = factor(phage_spor_host), y = gene.log)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~dataset , ncol = 1)
+
+
+ggplot(df.bac.stats, aes(x = factor(phage_spor_host), fill = factor(phage_spor_host), y = pl.ratio)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~dataset , ncol = 1)
+
+ggplot(df.bac, aes(x = factor(phage_spor_host), fill = factor(phage_spor_host), y = GC)) + 
+  geom_boxplot(binaxis = "y", stackdir = "center", position = "dodge") + geom_jitter(width = 0.2)  +  ylab("log10 (Genome Size)") + xlab("") + ggtitle("INPHARED") + labs(fill="Lifestyle") + facet_wrap(~dataset , ncol = 1)
+```
+```{r}
+
+library(ggpubr)
+ggplot(df.bac, aes(genome.log, gene.log, fill = factor(phage_spor_host), colour = phage_spor_host)) +
+  geom_point() +
+  geom_smooth(method="lm")+ # Add regression line
+ stat_regline_equation(aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~~")),
+                        label.x.npc = "middle", label.y.npc = "top" ) + facet_wrap(~dataset , ncol = 1)# Add equation#+ ylim(0, 25) #+ xlim(0, 400000)
+```
+
+
+```{r}
+# install if needed
+# install.packages(c("broom.mixed"))
+
+library(lme4)
+library(emmeans)      # for emtrends if you need slopes text
+library(broom.mixed)  # tidy mixed model predictions (optional)
+library(tidyverse)    # ggplot2 + dplyr
+
+df.bac$dataset <- factor(df.bac$dataset, levels = unique(df.bac$dataset))
+df.bac$lifestyle <- factor(df.bac$lifestyle, levels = unique(df.bac$lifestyle))
+df.bac$f_spor <- factor(df.bac$f_spor, levels = unique(df.bac$f_spor))
+
+gmin <- min(df.bac$genome.log, na.rm = TRUE)
+gmax <- max(df.bac$genome.log, na.rm = TRUE)
+grid <- seq(gmin, gmax, length.out = 200)
+ds_levels <- levels(df.bac$dataset)
+
+pred_grid_all <- expand.grid(
+  genome.log = grid,
+  lifestyle  = levels(df.bac$lifestyle),
+  f_spor     = levels(df.bac$f_spor),
+  dataset    = ds_levels,
+  stringsAsFactors = FALSE
+)
+
+pred_grid_all$dataset  <- factor(pred_grid_all$dataset, levels = levels(df.bac$dataset))
+pred_grid_all$lifestyle <- factor(pred_grid_all$lifestyle, levels = levels(df.bac$lifestyle))
+pred_grid_all$f_spor    <- factor(pred_grid_all$f_spor, levels = levels(df.bac$f_spor))
+
+pred_grid_all$gene.log_pred_fixed <- predict(m, newdata = pred_grid_all, re.form = NA)
+
+library(dplyr)
+pred_grid_avg <- pred_grid_all %>%
+  group_by(genome.log, lifestyle, f_spor) %>%
+  summarize(gene.log_pred_fixed = mean(gene.log_pred_fixed), .groups = "drop")
+
+# Plot dataset-averaged population lines
+ggplot(df.bac, aes(x = genome.log, y = gene.log, color = lifestyle)) +
+  geom_point(alpha = 0.35, size = 1.5) +
+  facet_wrap(~ f_spor) +
+  geom_line(data = pred_grid_avg, aes(x = genome.log, y = gene.log_pred_fixed, color = lifestyle),
+            size = 1) +
+  labs(x = "log10(genome size)", y = "log10(number of genes)",
+       title = "Dataset-averaged fixed-effect power laws") +
+  theme_minimal()
+
+
+
+ds_levels <- levels(df.bac$dataset)
+
+pred_grid_all <- expand.grid(
+  genome.log = grid,
+  lifestyle  = levels(df.bac$lifestyle),
+  f_spor     = levels(df.bac$f_spor),
+  dataset    = ds_levels,
+  stringsAsFactors = FALSE
+)
+
+pred_grid_all$dataset  <- factor(pred_grid_all$dataset, levels = levels(df.bac$dataset))
+pred_grid_all$lifestyle <- factor(pred_grid_all$lifestyle, levels = levels(df.bac$lifestyle))
+pred_grid_all$f_spor    <- factor(pred_grid_all$f_spor, levels = levels(df.bac$f_spor))
+
+pred_grid_all$gene.log_pred_fixed <- predict(m, newdata = pred_grid_all, re.form = NA)
+
+library(dplyr)
+pred_grid_avg <- pred_grid_all %>%
+  group_by(genome.log, lifestyle, f_spor) %>%
+  summarize(gene.log_pred_fixed = mean(gene.log_pred_fixed), .groups = "drop")
+
+ggplot(df.bac, aes(x = genome.log, y = gene.log)) +
+  geom_point(aes(color = lifestyle), alpha = 0.35, size = 1.4) +
+  facet_wrap(~ f_spor) +
+  geom_line(data = pred_grid_all, aes(x = genome.log, y = gene.log_pred_fixed, color = dataset, linetype = lifestyle),
+            size = 0.8, alpha = 0.8) +
+  labs(x = "log10(genome size)", y = "log10(number of genes)",
+       title = "Fixed-effect predictions separated by dataset") +
+  theme_minimal()
+```
+
+
+```{r}
+# ---- packages --------------------------------------------------------------
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(patchwork)    # for arranging plots; install if needed
+# install.packages(c("patchwork","effsize")) if not installed
+library(effsize)      # for Cliff's delta (cliff.delta)
+
+# ---- prepare data ---------------------------------------------------------
+dat <- df.bac.stats %>%
+  filter(lifestyle == "Temperate") %>%
+  select(gc.dif, f_spor) %>%
+  mutate(group = ifelse(f_spor, "sporulating", "non-sporulating"),
+         group = factor(group, levels = c("sporulating", "non-sporulating")))
+
+# quick sample sizes
+table(dat$group)
+
+# ---- A. ECDF plot ---------------------------------------------------------
+p_ecdf <- ggplot(dat, aes(x = gc.dif, colour = group, linetype = group)) +
+  stat_ecdf(size = 1) +
+  labs(title = "ECDF of gc.dif — Temperate bacteria",
+       x = "gc.dif", y = "Empirical CDF",
+       colour = NULL, linetype = NULL) +
+  theme_minimal(base_size = 13)
+
+
+p_ecdf
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Temp_GCDif_ECDF.png"))
+
+
+# ---- B. Density plot (smoothed) -------------------------------------------
+p_density <- ggplot(dat, aes(x = gc.dif, fill = group)) +
+  geom_density(alpha = 0.35) +
+  labs(title = "Density estimate of gc.dif",
+       x = "gc.dif", y = "Density",
+       fill = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- C. Violin + inner boxplot + jitter -----------------------------------
+p_violin <- ggplot(dat, aes(x = group, y = gc.dif, fill = group)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
+  geom_boxplot(width = 0.13, outlier.shape = NA) +
+  geom_jitter(width = 0.12, size = 0.7, alpha = 0.6) +
+  labs(title = "Violin + boxplot of gc.dif, Temperate",
+       x = "", y = "gc.dif") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+
+# ---- Combine plots --------------------------------------------------------
+combined_plot <- (p_ecdf | p_density) / p_violin + 
+  plot_annotation(caption = "Groups: sporulating vs non-sporulating (Temperate)")
+print(combined_plot)
+
+# ---- D. Effect-size numbers ------------------------------------------------
+# 1) median difference (sporulating - non-sporulating)
+med_sp <- median(dat$gc.dif[dat$group == "sporulating"], na.rm = TRUE)
+med_nsp <- median(dat$gc.dif[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_median <- med_sp - med_nsp
+
+# 2) mean difference
+mean_sp <- mean(dat$gc.dif[dat$group == "sporulating"], na.rm = TRUE)
+mean_nsp <- mean(dat$gc.dif[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_mean <- mean_sp - mean_nsp
+
+# 3) Cliff's delta (with effsize::cliff.delta)
+cd <- cliff.delta(gc.dif ~ group, data = dat, conf.level = 0.95) 
+# cd$estimate is Cliff's delta; cd$magnitude gives small/medium/large
+
+# 4) Common-language effect size (probability a random sporulating > random non-sporulating)
+x <- dat$gc.dif[dat$group == "sporulating"]
+y <- dat$gc.dif[dat$group == "non-sporulating"]
+# compute pairwise comparisons
+pairs <- outer(x, y, FUN = function(a,b) ifelse(a > b, 1, ifelse(a < b, 0, 0.5)))
+cl_effect <- mean(pairs, na.rm = TRUE)  # probability sporulating > non-sporulating
+
+# 5) Permutation (median) — quick p-value (optional)
+set.seed(42)
+obs_med_diff <- delta_median
+nperm <- 10000
+all_x <- dat$gc.dif
+group_labels <- dat$group
+perm_med <- replicate(nperm, {
+  lab_perm <- sample(group_labels)
+  median(all_x[lab_perm == "sporulating"], na.rm = TRUE) -
+    median(all_x[lab_perm == "non-sporulating"], na.rm = TRUE)
+})
+perm_pval <- mean(abs(perm_med) >= abs(obs_med_diff))
+
+# ---- E. Print effect-size summary -----------------------------------------
+cat("\nEffect-size summary (Temperate — sporulating minus non-sporulating):\n")
+cat(sprintf("Median(s)   : sporulating = %.4f, non-sporulating = %.4f, Δmedian = %.4f\n",
+            med_sp, med_nsp, delta_median))
+cat(sprintf("Mean(s)     : sporulating = %.4f, non-sporulating = %.4f, Δmean = %.4f\n",
+            mean_sp, mean_nsp, delta_mean))
+cat(sprintf("Cliff's δ   : estimate = %.4f, magnitude = %s\n",
+            cd$estimate, cd$magnitude))
+cat(sprintf("Common-lang : P(sporulating > non-sporulating) = %.3f\n", cl_effect))
+cat(sprintf("Perm (median) p-value (n=%d) = %.4f\n\n", nperm, perm_pval))
+
+# ---- F. Optional: Annotate violin with median difference -------------------
+# Add text annotation to violin
+ann_text <- paste0("Δmedian = ", signif(delta_median, 3),
+                   "\nCliff's δ = ", signif(cd$estimate, 3),
+                   "\nP_CL = ", signif(cl_effect, 3))
+p_violin_annot <- p_violin +
+  annotate("text", x = 1.5, y = max(dat$gc.dif, na.rm = TRUE), label = ann_text,
+           hjust = 0.5, vjust = 1, size = 3.5) +  ylab("Phage GC% - Host GC%") +ggtitle("Temperate")
+
+
+print(p_violin_annot)
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Temp_GCDif_violin.png"))
+
+```
+
+```{r} 
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(patchwork)    # for arranging plots; install if needed
+# install.packages(c("patchwork","effsize")) if not installed
+library(effsize)      # for Cliff's delta (cliff.delta)
+
+# ---- prepare data ---------------------------------------------------------
+dat <- df.bac.stats %>%
+  filter(lifestyle == "Temperate") %>%
+  select(gc.dif.abs, f_spor) %>%
+  mutate(group = ifelse(f_spor, "sporulating", "non-sporulating"),
+         group = factor(group, levels = c("sporulating", "non-sporulating")))
+
+# quick sample sizes
+table(dat$group)
+
+# ---- A. ECDF plot ---------------------------------------------------------
+p_ecdf <- ggplot(dat, aes(x = gc.dif.abs, colour = group, linetype = group)) +
+  stat_ecdf(size = 1) +
+  labs(title = "ECDF of gc.dif.abs — Temperate bacteria",
+       x = "Absolute GC Difference", y = "Empirical CDF",
+       colour = NULL, linetype = NULL) +
+  theme_minimal(base_size = 13)
+
+p_ecdf
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Temp_GCDifABs_ECDF.png"))
+
+
+
+# ---- B. Density plot (smoothed) -------------------------------------------
+p_density <- ggplot(dat, aes(x = gc.dif.abs, fill = group)) +
+  geom_density(alpha = 0.35) +
+  labs(title = "Density estimate of gc.dif.abs",
+       x = "gc.dif.abs", y = "Density",
+       fill = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- C. Violin + inner boxplot + jitter -----------------------------------
+p_violin <- ggplot(dat, aes(x = group, y = gc.dif.abs, fill = group)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
+  geom_boxplot(width = 0.13, outlier.shape = NA) +
+  geom_jitter(width = 0.12, size = 0.7, alpha = 0.6) +
+  labs(title = "Violin + boxplot of gc.dif.abs, Temperate",
+       x = "", y = "gc.dif.abs") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+
+# ---- Combine plots --------------------------------------------------------
+combined_plot <- (p_ecdf | p_density) / p_violin + 
+  plot_annotation(caption = "Groups: sporulating vs non-sporulating (Temperate)")
+print(combined_plot)
+
+# ---- D. Effect-size numbers ------------------------------------------------
+# 1) median difference (sporulating - non-sporulating)
+med_sp <- median(dat$gc.dif.abs[dat$group == "sporulating"], na.rm = TRUE)
+med_nsp <- median(dat$gc.dif.abs[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_median <- med_sp - med_nsp
+
+# 2) mean difference
+mean_sp <- mean(dat$gc.dif.abs[dat$group == "sporulating"], na.rm = TRUE)
+mean_nsp <- mean(dat$gc.dif.abs[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_mean <- mean_sp - mean_nsp
+
+# 3) Cliff's delta (with effsize::cliff.delta)
+cd <- cliff.delta(gc.dif.abs ~ group, data = dat, conf.level = 0.95) 
+# cd$estimate is Cliff's delta; cd$magnitude gives small/medium/large
+
+# 4) Common-language effect size (probability a random sporulating > random non-sporulating)
+x <- dat$gc.dif.abs[dat$group == "sporulating"]
+y <- dat$gc.dif.abs[dat$group == "non-sporulating"]
+# compute pairwise comparisons
+pairs <- outer(x, y, FUN = function(a,b) ifelse(a > b, 1, ifelse(a < b, 0, 0.5)))
+cl_effect <- mean(pairs, na.rm = TRUE)  # probability sporulating > non-sporulating
+
+# 5) Permutation (median) — quick p-value (optional)
+set.seed(42)
+obs_med_diff <- delta_median
+nperm <- 10000
+all_x <- dat$gc.dif.abs
+group_labels <- dat$group
+perm_med <- replicate(nperm, {
+  lab_perm <- sample(group_labels)
+  median(all_x[lab_perm == "sporulating"], na.rm = TRUE) -
+    median(all_x[lab_perm == "non-sporulating"], na.rm = TRUE)
+})
+perm_pval <- mean(abs(perm_med) >= abs(obs_med_diff))
+
+# ---- E. Print effect-size summary -----------------------------------------
+cat("\nEffect-size summary (Temperate — sporulating minus non-sporulating):\n")
+cat(sprintf("Median(s)   : sporulating = %.4f, non-sporulating = %.4f, Δmedian = %.4f\n",
+            med_sp, med_nsp, delta_median))
+cat(sprintf("Mean(s)     : sporulating = %.4f, non-sporulating = %.4f, Δmean = %.4f\n",
+            mean_sp, mean_nsp, delta_mean))
+cat(sprintf("Cliff's δ   : estimate = %.4f, magnitude = %s\n",
+            cd$estimate, cd$magnitude))
+cat(sprintf("Common-lang : P(sporulating > non-sporulating) = %.3f\n", cl_effect))
+cat(sprintf("Perm (median) p-value (n=%d) = %.4f\n\n", nperm, perm_pval))
+
+# ---- F. Optional: Annotate violin with median difference -------------------
+# Add text annotation to violin
+ann_text <- paste0("Δmedian = ", signif(delta_median, 3),
+                   "\nCliff's δ = ", signif(cd$estimate, 3),
+                   "\nP_CL = ", signif(cl_effect, 3))
+p_violin_annot <- p_violin +
+  annotate("text", x = 1.5, y = max(dat$gc.dif.abs, na.rm = TRUE), label = ann_text,
+           hjust = 0.5, vjust = 1, size = 3.5) +  ylab("Absolute difference in Phage-Host GC%") +ggtitle("Temperate")
+
+
+print(p_violin_annot)
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Temp_GCDifAbs_violin.png"))
+```
+
+```{r}
+
+# ---- prepare data ---------------------------------------------------------
+dat <- df.bac.stats %>%
+  filter(lifestyle == "Lytic") %>%
+  select(gc.dif, f_spor) %>%
+  mutate(group = ifelse(f_spor, "sporulating", "non-sporulating"),
+         group = factor(group, levels = c("sporulating", "non-sporulating")))
+
+# quick sample sizes
+table(dat$group)
+
+# ---- A. ECDF plot ---------------------------------------------------------
+p_ecdf <- ggplot(dat, aes(x = gc.dif, colour = group, linetype = group)) +
+  stat_ecdf(size = 1) +
+  labs(title = "ECDF of gc.dif — Lytic bacteria",
+       x = "GC Difference", y = "Empirical CDF",
+       colour = NULL, linetype = NULL) +
+  theme_minimal(base_size = 13)
+
+p_ecdf
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Lytic_GCDif_ECDF.png"))
+
+
+
+# ---- B. Density plot (smoothed) -------------------------------------------
+p_density <- ggplot(dat, aes(x = gc.dif, fill = group)) +
+  geom_density(alpha = 0.35) +
+  labs(title = "Density estimate of gc.dif",
+       x = "gc.dif", y = "Density",
+       fill = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- C. Violin + inner boxplot + jitter -----------------------------------
+p_violin <- ggplot(dat, aes(x = group, y = gc.dif, fill = group)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
+  geom_boxplot(width = 0.13, outlier.shape = NA) +
+  geom_jitter(width = 0.12, size = 0.7, alpha = 0.6) +
+  labs(title = "Violin + boxplot of gc.dif, Lytic",
+       x = "", y = "gc.dif") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+
+# ---- Combine plots --------------------------------------------------------
+combined_plot <- (p_ecdf | p_density) / p_violin + 
+  plot_annotation(caption = "Groups: sporulating vs non-sporulating (Lytic)")
+print(combined_plot)
+
+# ---- D. Effect-size numbers ------------------------------------------------
+# 1) median difference (sporulating - non-sporulating)
+med_sp <- median(dat$gc.dif[dat$group == "sporulating"], na.rm = TRUE)
+med_nsp <- median(dat$gc.dif[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_median <- med_sp - med_nsp
+
+# 2) mean difference
+mean_sp <- mean(dat$gc.dif[dat$group == "sporulating"], na.rm = TRUE)
+mean_nsp <- mean(dat$gc.dif[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_mean <- mean_sp - mean_nsp
+
+# 3) Cliff's delta (with effsize::cliff.delta)
+cd <- cliff.delta(gc.dif ~ group, data = dat, conf.level = 0.95) 
+# cd$estimate is Cliff's delta; cd$magnitude gives small/medium/large
+
+# 4) Common-language effect size (probability a random sporulating > random non-sporulating)
+x <- dat$gc.dif[dat$group == "sporulating"]
+y <- dat$gc.dif[dat$group == "non-sporulating"]
+# compute pairwise comparisons
+pairs <- outer(x, y, FUN = function(a,b) ifelse(a > b, 1, ifelse(a < b, 0, 0.5)))
+cl_effect <- mean(pairs, na.rm = TRUE)  # probability sporulating > non-sporulating
+
+# 5) Permutation (median) — quick p-value (optional)
+set.seed(42)
+obs_med_diff <- delta_median
+nperm <- 10000
+all_x <- dat$gc.dif
+group_labels <- dat$group
+perm_med <- replicate(nperm, {
+  lab_perm <- sample(group_labels)
+  median(all_x[lab_perm == "sporulating"], na.rm = TRUE) -
+    median(all_x[lab_perm == "non-sporulating"], na.rm = TRUE)
+})
+perm_pval <- mean(abs(perm_med) >= abs(obs_med_diff))
+
+# ---- E. Print effect-size summary -----------------------------------------
+cat("\nEffect-size summary (Lytic — sporulating minus non-sporulating):\n")
+cat(sprintf("Median(s)   : sporulating = %.4f, non-sporulating = %.4f, Δmedian = %.4f\n",
+            med_sp, med_nsp, delta_median))
+cat(sprintf("Mean(s)     : sporulating = %.4f, non-sporulating = %.4f, Δmean = %.4f\n",
+            mean_sp, mean_nsp, delta_mean))
+cat(sprintf("Cliff's δ   : estimate = %.4f, magnitude = %s\n",
+            cd$estimate, cd$magnitude))
+cat(sprintf("Common-lang : P(sporulating > non-sporulating) = %.3f\n", cl_effect))
+cat(sprintf("Perm (median) p-value (n=%d) = %.4f\n\n", nperm, perm_pval))
+
+# ---- F. Optional: Annotate violin with median difference -------------------
+# Add text annotation to violin
+ann_text <- paste0("Δmedian = ", signif(delta_median, 3),
+                   "\nCliff's δ = ", signif(cd$estimate, 3),
+                   "\nP_CL = ", signif(cl_effect, 3))
+
+p_violin + ylab("Phage GC% - Host GC%")
+
+p_violin_annot <- p_violin +
+  annotate("text", x = 1.5, y = max(dat$gc.dif, na.rm = TRUE), label = ann_text,
+           hjust = 0.5, vjust = 1, size = 3.5) + ylab("Phage GC% - Host GC%") +ggtitle("Lytic")
+
+
+print(p_violin_annot)
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Lytic_GCDif_violin.png"))
+
+```
+
+
+```{r}
+
+# ---- prepare data ---------------------------------------------------------
+dat <- df.bac.stats %>%
+  filter(lifestyle == "Lytic") %>%
+  select(gc.dif.abs, f_spor) %>%
+  mutate(group = ifelse(f_spor, "sporulating", "non-sporulating"),
+         group = factor(group, levels = c("sporulating", "non-sporulating")))
+
+# quick sample sizes
+table(dat$group)
+
+# ---- A. ECDF plot ---------------------------------------------------------
+p_ecdf <- ggplot(dat, aes(x = gc.dif.abs, colour = group, linetype = group)) +
+  stat_ecdf(size = 1) +
+  labs(title = "ECDF of gc.dif.abs — Lytic bacteria",
+       x = "Absolute GC Difference", y = "Empirical CDF",
+       colour = NULL, linetype = NULL) +
+  theme_minimal(base_size = 13)
+
+
+p_ecdf
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Lytic_GCDifAbs_ECDF.png"))
+
+
+
+# ---- B. Density plot (smoothed) -------------------------------------------
+p_density <- ggplot(dat, aes(x = gc.dif.abs, fill = group)) +
+  geom_density(alpha = 0.35) +
+  labs(title = "Density estimate of gc.dif.abs",
+       x = "gc.dif.abs", y = "Density",
+       fill = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- C. Violin + inner boxplot + jitter -----------------------------------
+p_violin <- ggplot(dat, aes(x = group, y = gc.dif.abs, fill = group)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
+  geom_boxplot(width = 0.13, outlier.shape = NA) +
+  geom_jitter(width = 0.12, size = 0.7, alpha = 0.6) +
+  labs(title = "Violin + boxplot of gc.dif.abs, Lytic",
+       x = "", y = "gc.dif.abs") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+
+# ---- Combine plots --------------------------------------------------------
+combined_plot <- (p_ecdf | p_density) / p_violin + 
+  plot_annotation(caption = "Groups: sporulating vs non-sporulating (Lytic)")
+print(combined_plot)
+
+# ---- D. Effect-size numbers ------------------------------------------------
+# 1) median difference (sporulating - non-sporulating)
+med_sp <- median(dat$gc.dif.abs[dat$group == "sporulating"], na.rm = TRUE)
+med_nsp <- median(dat$gc.dif.abs[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_median <- med_sp - med_nsp
+
+# 2) mean difference
+mean_sp <- mean(dat$gc.dif.abs[dat$group == "sporulating"], na.rm = TRUE)
+mean_nsp <- mean(dat$gc.dif.abs[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_mean <- mean_sp - mean_nsp
+
+# 3) Cliff's delta (with effsize::cliff.delta)
+cd <- cliff.delta(gc.dif.abs ~ group, data = dat, conf.level = 0.95) 
+# cd$estimate is Cliff's delta; cd$magnitude gives small/medium/large
+
+# 4) Common-language effect size (probability a random sporulating > random non-sporulating)
+x <- dat$gc.dif.abs[dat$group == "sporulating"]
+y <- dat$gc.dif.abs[dat$group == "non-sporulating"]
+# compute pairwise comparisons
+pairs <- outer(x, y, FUN = function(a,b) ifelse(a > b, 1, ifelse(a < b, 0, 0.5)))
+cl_effect <- mean(pairs, na.rm = TRUE)  # probability sporulating > non-sporulating
+
+# 5) Permutation (median) — quick p-value (optional)
+set.seed(42)
+obs_med_diff <- delta_median
+nperm <- 10000
+all_x <- dat$gc.dif.abs
+group_labels <- dat$group
+perm_med <- replicate(nperm, {
+  lab_perm <- sample(group_labels)
+  median(all_x[lab_perm == "sporulating"], na.rm = TRUE) -
+    median(all_x[lab_perm == "non-sporulating"], na.rm = TRUE)
+})
+perm_pval <- mean(abs(perm_med) >= abs(obs_med_diff))
+
+# ---- E. Print effect-size summary -----------------------------------------
+cat("\nEffect-size summary (Lytic — sporulating minus non-sporulating):\n")
+cat(sprintf("Median(s)   : sporulating = %.4f, non-sporulating = %.4f, Δmedian = %.4f\n",
+            med_sp, med_nsp, delta_median))
+cat(sprintf("Mean(s)     : sporulating = %.4f, non-sporulating = %.4f, Δmean = %.4f\n",
+            mean_sp, mean_nsp, delta_mean))
+cat(sprintf("Cliff's δ   : estimate = %.4f, magnitude = %s\n",
+            cd$estimate, cd$magnitude))
+cat(sprintf("Common-lang : P(sporulating > non-sporulating) = %.3f\n", cl_effect))
+cat(sprintf("Perm (median) p-value (n=%d) = %.4f\n\n", nperm, perm_pval))
+
+# ---- F. Optional: Annotate violin with median difference -------------------
+# Add text annotation to violin
+ann_text <- paste0("Δmedian = ", signif(delta_median, 3),
+                   "\nCliff's δ = ", signif(cd$estimate, 3),
+                   "\nP_CL = ", signif(cl_effect, 3))
+
+p_violin + ylab("Phage GC% - Host GC%")
+
+p_violin_annot <- p_violin +
+  annotate("text", x = 1.5, y = max(dat$gc.dif.abs, na.rm = TRUE), label = ann_text,
+           hjust = 0.5, vjust = 1, size = 3.5)+ ylab("Absolute difference in Phage-Host GC%") +ggtitle("Lytic")
+
+
+print(p_violin_annot)
+
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Lytic_GCDifAbs_violin.png"))
+
+
+```
+
+
+```{r}
+
+# ---- prepare data ---------------------------------------------------------
+dat <- df.bac.stats %>%
+  filter(lifestyle == "Lytic") %>%
+  select(pl.ratio, f_spor) %>%
+  mutate(group = ifelse(f_spor, "sporulating", "non-sporulating"),
+         group = factor(group, levels = c("sporulating", "non-sporulating")))
+
+# quick sample sizes
+table(dat$group)
+
+# ---- A. ECDF plot ---------------------------------------------------------
+p_ecdf <- ggplot(dat, aes(x = pl.ratio, colour = group, linetype = group)) +
+  stat_ecdf(size = 1) +
+  labs(title = "ECDF of pl.ratio — Lytic bacteria",
+       x = "pl.ratio", y = "Empirical CDF",
+       colour = NULL, linetype = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- B. Density plot (smoothed) -------------------------------------------
+p_density <- ggplot(dat, aes(x = pl.ratio, fill = group)) +
+  geom_density(alpha = 0.35) +
+  labs(title = "Density estimate of pl.ratio",
+       x = "pl.ratio", y = "Density",
+       fill = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- C. Violin + inner boxplot + jitter -----------------------------------
+p_violin <- ggplot(dat, aes(x = group, y = pl.ratio, fill = group)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
+  geom_boxplot(width = 0.13, outlier.shape = NA) +
+  geom_jitter(width = 0.12, size = 0.7, alpha = 0.6) +
+  labs(title = "Violin + boxplot of pl.ratio, Lytic",
+       x = "", y = "pl.ratio") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+
+# ---- Combine plots --------------------------------------------------------
+combined_plot <- (p_ecdf | p_density) / p_violin + 
+  plot_annotation(caption = "Groups: sporulating vs non-sporulating (Lytic)")
+print(combined_plot)
+
+# ---- D. Effect-size numbers ------------------------------------------------
+# 1) median difference (sporulating - non-sporulating)
+med_sp <- median(dat$pl.ratio[dat$group == "sporulating"], na.rm = TRUE)
+med_nsp <- median(dat$pl.ratio[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_median <- med_sp - med_nsp
+
+# 2) mean difference
+mean_sp <- mean(dat$pl.ratio[dat$group == "sporulating"], na.rm = TRUE)
+mean_nsp <- mean(dat$pl.ratio[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_mean <- mean_sp - mean_nsp
+
+# 3) Cliff's delta (with effsize::cliff.delta)
+cd <- cliff.delta(pl.ratio ~ group, data = dat, conf.level = 0.95) 
+# cd$estimate is Cliff's delta; cd$magnitude gives small/medium/large
+
+# 4) Common-language effect size (probability a random sporulating > random non-sporulating)
+x <- dat$pl.ratio[dat$group == "sporulating"]
+y <- dat$pl.ratio[dat$group == "non-sporulating"]
+# compute pairwise comparisons
+pairs <- outer(x, y, FUN = function(a,b) ifelse(a > b, 1, ifelse(a < b, 0, 0.5)))
+cl_effect <- mean(pairs, na.rm = TRUE)  # probability sporulating > non-sporulating
+
+# 5) Permutation (median) — quick p-value (optional)
+set.seed(42)
+obs_med_diff <- delta_median
+nperm <- 10000
+all_x <- dat$pl.ratio
+group_labels <- dat$group
+perm_med <- replicate(nperm, {
+  lab_perm <- sample(group_labels)
+  median(all_x[lab_perm == "sporulating"], na.rm = TRUE) -
+    median(all_x[lab_perm == "non-sporulating"], na.rm = TRUE)
+})
+perm_pval <- mean(abs(perm_med) >= abs(obs_med_diff))
+
+# ---- E. Print effect-size summary -----------------------------------------
+cat("\nEffect-size summary (Lytic — sporulating minus non-sporulating):\n")
+cat(sprintf("Median(s)   : sporulating = %.4f, non-sporulating = %.4f, Δmedian = %.4f\n",
+            med_sp, med_nsp, delta_median))
+cat(sprintf("Mean(s)     : sporulating = %.4f, non-sporulating = %.4f, Δmean = %.4f\n",
+            mean_sp, mean_nsp, delta_mean))
+cat(sprintf("Cliff's δ   : estimate = %.4f, magnitude = %s\n",
+            cd$estimate, cd$magnitude))
+cat(sprintf("Common-lang : P(sporulating > non-sporulating) = %.3f\n", cl_effect))
+cat(sprintf("Perm (median) p-value (n=%d) = %.4f\n\n", nperm, perm_pval))
+
+# ---- F. Optional: Annotate violin with median difference -------------------
+# Add text annotation to violin
+ann_text <- paste0("Δmedian = ", signif(delta_median, 3),
+                   "\nCliff's δ = ", signif(cd$estimate, 3),
+                   "\nP_CL = ", signif(cl_effect, 3))
+
+p_violin + ylab("Phage GC% - Host GC%")
+
+p_violin_annot <- p_violin +
+  annotate("text", x = 1.5, y = max(dat$pl.ratio, na.rm = TRUE), label = ann_text,
+           hjust = 0.5, vjust = 1, size = 3.5)+ ylab("Ratio between phage and host coding density") +ggtitle("Lytic")
+
+
+print(p_violin_annot)
+
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Lytic_PLRatio_violin.png"))
+```
+
+
+
+
+```{r}
+# ---- packages --------------------------------------------------------------
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(patchwork)    # for arranging plots; install if needed
+# install.packages(c("patchwork","effsize")) if not installed
+library(effsize)      # for Cliff's delta (cliff.delta)
+
+# ---- prepare data ---------------------------------------------------------
+dat <- df.bac.stats %>%
+  filter(lifestyle == "Temperate") %>%
+  select(pl.ratio, f_spor) %>%
+  mutate(group = ifelse(f_spor, "sporulating", "non-sporulating"),
+         group = factor(group, levels = c("sporulating", "non-sporulating")))
+
+# quick sample sizes
+table(dat$group)
+
+# ---- A. ECDF plot ---------------------------------------------------------
+p_ecdf <- ggplot(dat, aes(x = pl.ratio, colour = group, linetype = group)) +
+  stat_ecdf(size = 1) +
+  labs(title = "ECDF of pl.ratio — Temperate bacteria",
+       x = "pl.ratio", y = "Empirical CDF",
+       colour = NULL, linetype = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- B. Density plot (smoothed) -------------------------------------------
+p_density <- ggplot(dat, aes(x = pl.ratio, fill = group)) +
+  geom_density(alpha = 0.35) +
+  labs(title = "Density estimate of pl.ratio",
+       x = "pl.ratio", y = "Density",
+       fill = NULL) +
+  theme_minimal(base_size = 13)
+
+# ---- C. Violin + inner boxplot + jitter -----------------------------------
+p_violin <- ggplot(dat, aes(x = group, y = pl.ratio, fill = group)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
+  geom_boxplot(width = 0.13, outlier.shape = NA) +
+  geom_jitter(width = 0.12, size = 0.7, alpha = 0.6) +
+  labs(title = "Violin + boxplot of pl.ratio, Temperate",
+       x = "", y = "pl.ratio") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none")
+
+# ---- Combine plots --------------------------------------------------------
+combined_plot <- (p_ecdf | p_density) / p_violin + 
+  plot_annotation(caption = "Groups: sporulating vs non-sporulating (Temperate)")
+print(combined_plot)
+
+# ---- D. Effect-size numbers ------------------------------------------------
+# 1) median difference (sporulating - non-sporulating)
+med_sp <- median(dat$pl.ratio[dat$group == "sporulating"], na.rm = TRUE)
+med_nsp <- median(dat$pl.ratio[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_median <- med_sp - med_nsp
+
+# 2) mean difference
+mean_sp <- mean(dat$pl.ratio[dat$group == "sporulating"], na.rm = TRUE)
+mean_nsp <- mean(dat$pl.ratio[dat$group == "non-sporulating"], na.rm = TRUE)
+delta_mean <- mean_sp - mean_nsp
+
+# 3) Cliff's delta (with effsize::cliff.delta)
+cd <- cliff.delta(pl.ratio ~ group, data = dat, conf.level = 0.95) 
+# cd$estimate is Cliff's delta; cd$magnitude gives small/medium/large
+
+# 4) Common-language effect size (probability a random sporulating > random non-sporulating)
+x <- dat$pl.ratio[dat$group == "sporulating"]
+y <- dat$pl.ratio[dat$group == "non-sporulating"]
+# compute pairwise comparisons
+pairs <- outer(x, y, FUN = function(a,b) ifelse(a > b, 1, ifelse(a < b, 0, 0.5)))
+cl_effect <- mean(pairs, na.rm = TRUE)  # probability sporulating > non-sporulating
+
+# 5) Permutation (median) — quick p-value (optional)
+set.seed(42)
+obs_med_diff <- delta_median
+nperm <- 10000
+all_x <- dat$pl.ratio
+group_labels <- dat$group
+perm_med <- replicate(nperm, {
+  lab_perm <- sample(group_labels)
+  median(all_x[lab_perm == "sporulating"], na.rm = TRUE) -
+    median(all_x[lab_perm == "non-sporulating"], na.rm = TRUE)
+})
+perm_pval <- mean(abs(perm_med) >= abs(obs_med_diff))
+
+# ---- E. Print effect-size summary -----------------------------------------
+cat("\nEffect-size summary (Temperate — sporulating minus non-sporulating):\n")
+cat(sprintf("Median(s)   : sporulating = %.4f, non-sporulating = %.4f, Δmedian = %.4f\n",
+            med_sp, med_nsp, delta_median))
+cat(sprintf("Mean(s)     : sporulating = %.4f, non-sporulating = %.4f, Δmean = %.4f\n",
+            mean_sp, mean_nsp, delta_mean))
+cat(sprintf("Cliff's δ   : estimate = %.4f, magnitude = %s\n",
+            cd$estimate, cd$magnitude))
+cat(sprintf("Common-lang : P(sporulating > non-sporulating) = %.3f\n", cl_effect))
+cat(sprintf("Perm (median) p-value (n=%d) = %.4f\n\n", nperm, perm_pval))
+
+# ---- F. Optional: Annotate violin with median difference -------------------
+# Add text annotation to violin
+ann_text <- paste0("Δmedian = ", signif(delta_median, 3),
+                   "\nCliff's δ = ", signif(cd$estimate, 3),
+                   "\nP_CL = ", signif(cl_effect, 3))
+p_violin_annot <- p_violin +
+  annotate("text", x = 1.5, y = max(dat$pl.ratio, na.rm = TRUE), label = ann_text,
+           hjust = 0.5, vjust = 1, size = 3.5)+ ylab("Ratio between phage and host coding density") +ggtitle("Temperate")
+
+
+print(p_violin_annot)
+
+
+ggsave(here("01_desc_stats", "figs", "effect_size", "Temperate_PLRatio_violin.png"))
+```

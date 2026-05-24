@@ -1,0 +1,64 @@
+gene_name,remove,family,type,func,sporulation_impact_simp,sporulation_impact,localization,stage,Prophage,SporExpression,Spor_sigma,Other Sigma,regulon
+abrB,,,transcriptional regulator,growth regulation,Repress sporulation,Repress sporulation,Pre-division,Initiation,,Yes,SigA,,"Spo0A, AbrR"
+aprE,,peptidase S8 family,protease,protein degradation,Metabolism,Nutrient scavenging  ,Pre-division,Initiation,,Yes,SigA,,AbrB
+blyA,remove,N-acetylmuramoyl-L-alanine amidase 2 family,Lysin,Lysin,Lysis,Lysis,Unknown,Unknown,Prophage,Unknown,None,,
+cwlA,remove,N-acetylmuramoyl-L-alanine amidase 2 family,Lysin,Lysin,Lysis,Lysis,Unknown,Unknown,Prophage,Unknown,None,,
+cwlC,,N-acetylmuramoyl-L-alanine amidase 3 family,Lysin,Lysin,Lysis,Mother cell Lysis,Mother cell,Mother cell Lysis,,Exclusive,SigK,,
+cwlH,,N-acetylmuramoyl-L-alanine amidase 2 family,Lysin,Lysin,Lysis,Lysis,Mother cell,Mother cell Lysis,,Exclusive,SigK,,GerE
+cwlJ,,"cwlJ family (single member, according to UniProt)",Lysin,Spore coat,Spore coat,Spore coat,Spore,Germination,,Yes,"SigE, SigK",,SpoIIID
+dhhP,,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,
+dnaX,remove,"DnaX/STICHEL family (single member, according to UniProt)",DNA-modifying,Replication,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,
+endoA,,MazF,Toxin,mRNA interfase,Stress/Stationary Response,Stress Response,Unknown,Unknown,,Unknown,None,,
+endolysin,,,Unknown,Lysin,Lysis,Lysis,Unknown,Lysis,,Unknown,None,,
+fenA,,Nuclease,endonuclease,DNA protection,DNA-modifying,DNA protection,Forespore,Middle,,Yes,None,,
+floT,,"Stomatin, Prohibitin, Flotillin, and HflK/C (SPFH) domain protein family (with [[proteinCA4EF8385EAA4BBC47FF0D998C820D9F36F5F94D]] and [[protein11A55829B4C3E8EA434A600FF7B4102F8E5A7DCE]]) [pubmed34777311]",membrane protein,permeability,Stress/Stationary Response,Stress Response,Unknown,Unknown,,Unknown,None,SigW,
+lexA,,"peptidase S24 family (single member, according to UniProt)",transcriptional regulator,DNA repair,Repress sporulation / repair DNA,Repress sporulation / repair DNA,Pre-division,Initiation,,Yes,None,,lexA
+ligD,,"N-terminal part: LigD polymerase family (single member, according to UniProt), C-terminal part: ATP-dependent DNA ligase family (with [[proteinB66132676788FBA47D375193A1C01FC6F93E110F]], according to UniProt)",DNA-modifying,DNA repair,DNA-modifying,DNA repair,Unknown,Middle,,Unknown,None,,
+lytA,remove,autolysin,Lysin,Lysin,Unknown,Unknown,Unknown,Unknown,,Unknown,SigA,SigD,
+lytD,remove,"glycosyl hydrolase 73 family (with [[proteinAF0BC3D534BC2CCCAAB53B286CF4286E58A8A338]], according to UniProt)",remove,remove,remove,remove,remove,remove,,,None,,
+mdfA,,ClpC-Clp,protein adaptor,protein degradation,Metabolism,Metabolism,Forespore,Early,,Yes,SigF,,
+nadE,,NAD synthetase,NAD synthetase,Energy Metabolism,Metabolism,Metabolism,Unknown,Unknown,,Unknown,None,,
+nlpD,remove,remove,remove,remove,remove,remove,remove,remove,,remove,SigA,SigB,
+nucB,,Nuclease,DNA-modifying,DNA degradation,Metabolism,Nutrient scavenging  ,Mother cell,Mother cell Lysis,,Exclusive,SigE,,
+parA,,Par family,DNA-modifying,Partitioning,Partitioning,Partitioning,Both,Early,,Yes,None,,
+parB,,Par family,DNA-modifying,Partitioning,Partitioning,Partitioning,Both,Early,,Yes,None,,Spo0A
+parS,,DNA motif,DNA motif,Partitioning,Partitioning,Partitioning,Both,Early,,Yes,None,,
+pcrA,,Helicase,DNA-modifying,Replication,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,LexA
+pghL,,Lysin,Lysin,Lysin,Lysis,Lysis,Mother cell,Unknown,,Exclusive,SigK,,
+phoH,,"phoH family (with [[protein5913ABC121A03644897BD365D7E507661CD3AF39]], according to UniProt)",starvation protein,phosphate starvation protein,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,
+pncA,,Isochorismatase family,Nad salvage,Energy Metabolism,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,
+polA,remove,"DNA polymerase type-A family (single member, according to UniProt)",DNA-modifying,DNA processing,DNA-modifying,DNA repair,Unknown,Unknown,,Unknown,SigE,,
+rapA,,RAP family,transcriptional regulator,sporulation initiation,Repress sporulation,Repress sporulation,Pre-division,Initiation,,Yes,SigA,,Spo0A
+rapJ,,RAP family,transcriptional regulator,sporulation initiation,Repress sporulation,Repress sporulation,Pre-division,Initiation,,Yes,None,,
+rapK,,RAP family,transcriptional regulator,sporulation initiation,Repress sporulation,Repress sporulation,Pre-division,Initiation,,Yes,SigH,,"ComA, AbrB"
+rsfA,,,sigma factor regulator,sigma factor helper,Sporulation regulation,Sporulation regulation,Forespore,Middle,,Yes,"SigF, SigG",,rsfA
+sigA,,Sigma-70 factor family,sigma factor regulator,sigma factor regulator,Sporulation regulation,Sporulation regulation,Pre-division,Initiation,,Yes,SigA,,Spo0A
+sigF,,Sigma-70 factor family,sigma factor regulator,sigma factor regulator,Sporulation regulation,Sporulation regulation,Forespore,Early,,Exclusive,SigF,,"Spo0A, AbrR"
+sigG,,Sigma-70 factor family,sigma factor regulator,sigma factor regulator,Sporulation regulation,Sporulation regulation,Forespore,Late,,Exclusive,SigG,,
+sigH,,Sigma-70 factor family,sigma factor regulator,sigma factor regulator,Sporulation regulation,Sporulation regulation,Pre-division,Initiation,,Exclusive,SigH,,AbrB
+spoIIIE,,"FtsK/SpoIIIE/SftA family (with [[proteinDF77B46666595E86081C5345C91E08F86DF9FAEE]], according to UniProt)",DNA-modifying,Partitioning,Partitioning,Partitioning,Both,Early,,Yes,SigA,,
+spoIIQ,,,type iii secretion,Partitioning,Partitioning,Partitioning,Both,Middle,,Yes,SigF,,
+spoIVCA,,N-terminal part: site-specific recombinase resolvase family,DNA-modifying,Partitioning,Skin Element,Skin Element,Mother cell,Middle,,Yes,"SigE, SigK",,"SpoIIID, SknR"
+spoVG,,"SpoVG family (single member, according to UniProt)",DNA-modifying,Partitioning,Partitioning,Partitioning,Forespore,Early,,Yes,SigH,,AbrB
+sspB,,Alpha/beta-type SASP family,DNA-modifying,DNA processing,DNA protection,DNA protection,Forespore,Late,,Yes,SigG,,
+sspC,,Alpha/beta-type SASP family,DNA-modifying,DNA processing,DNA protection,DNA protection,Forespore,Late,,Yes,SigG,,
+tauA,,,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,
+tauC,,,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,
+tesA,,,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,
+xerD,remove,phage integrase family,DNA-modifying,Partitioning,Partitioning,Partitioning,Unknown,Unknown,Prophage,Unknown,None,,
+xlyB,remove,N-acetylmuramoyl-L-alanine amidase 2 family,Lysin,Lysin,Lysis,Lysis,Unknown,Unknown,Prophage,Unknown,None,,
+ycgL,,,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Yes,None,,
+yclG,,,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Yes,None,,
+yhaM,,YhaM,DNA-modifying,Competence,Unknown,Unknown,Unknown,Unknown,,Unknown,None,,LexA
+yhbB,,"Amidase 6 family (with [[proteinE3603BC23B04BA806F008EF13C6CDA23ADDAC7D8]], according to UniProt)",Lysin,Spore coat,Spore coat,Spore coat,Mother cell,Early,,Yes,SigE,,
+yhbH,,,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Yes,SigE,,
+yitB,,"PAPS reductase family (with [[protein51EB09C122A7166D662AE72842A44EC5FBA03134]], according to UniProt)",Metabolic,Sulfate reduction,Metabolism,Metabolism,Mother cell,Unknown,,Yes,SigK,,
+yjbA,,ClpC-Clp,protein adaptor,protein degradation,Metabolism,Metabolism,Forespore,Early,,Exclusive,SigF,,
+ylaK,,"C-terminal part: phoH family (with [[protein6BF4F99DEF2E032A8547B920086305775D04FACF]], according to UniProt)",starvation protein,phosphate starvation protein,Unknown,Unknown,Unknown,Middle,,Yes,None,,
+yoaM,,SOS response-associated peptidase family,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Yes,None,,
+ypeP,,Rnase,Unknown,Unknown,Unknown,Unknown,Unknown,Unknown,,Yes,None,,
+yqaN,,,Unknown,Unknown,Sporulation regulation,Skin Element,Unknown,Unknown,Prophage,Exclusive,SigA,,SknR
+yqhH,,"helicase family, SNF2/RAD54 helicase family (with [[protein265490FA83D6D3F178C26C9240E3CB224513BF42]], according to UniProt)",DNA-modifying,DNA processing,DNA-modifying,DNA processing,Forespore,Early,,Yes,SigF,,
+yuiC,,,RPF-like,Lysin,Stress/Stationary Response,Stationary Response,Pre-division,Initiation,,Yes,SigF,,
+ywqJ,,,Toxin,Toxin,Stress/Stationary Response,Stress Response,Unknown,Unknown,,Yes,None,,
+0A,,DNA motif,transcriptional regulator,sporulation initiation,Repress sporulation,Repress sporulation,Pre-division,Initiation,,Yes,,,Spo0A

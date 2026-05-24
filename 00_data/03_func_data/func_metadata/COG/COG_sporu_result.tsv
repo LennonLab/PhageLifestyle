@@ -1,0 +1,89 @@
+Organism	Protein	COG	Cat	Annotation
+1257	1687	COG0686	E	Alanine dehydrogenase (includes sporulation protein SpoVN)
+1646	18168	COG0784	T	CheY-like REC (receiver) domain, includes chemotaxis protein CheY and sporulation regulator Spo0F
+741	857	COG1300	D	Stage II sporulation protein SpoIIM, component of the engulfment complex
+772	805	COG1774	T	Cell fate regulator YaaT, PSP1 superfamily (controls sporulation, competence, biofilm development)
+500	830	COG1873	R	Sporulation protein YlmC, YlmC/YmxH family, contains PRC-barrel domain
+1432	2151	COG1994	O	Zn-dependent protease (includes sporulation protein SpoIVFB)
+246	320	COG2359	S	Stage V sporulation protein SpoVS, predicted DNA-binding, AlbA superfamily
+580	957	COG2385	D M	Sporulation protein SpoIID (lytic transglycosylase)
+576	592	COG2718	R	Uncharacterized conserved protein YeaH/YhbH, required for sporulation, DUF444 family
+572	587	COG2719	D	Stage V sporulation protein SpoVR/YcgB, involved in spore cortex formation (function unknown)
+252	327	COG3621	R	Patatin-like phospholipase/acyl hydrolase, includes sporulation protein CotR
+330	473	COG3679	T	Cell fate regulator YlbF, YheA/YmcA/DUF963 family (controls sporulation, competence, biofilm development)
+342	350	COG3854	D	Stage III sporulation protein SpoIIIAA
+157	250	COG4326	D	Stage 0 sporulation-control protein Spo0M
+121	123	COG4550	T	Cell fate regulator YmcA, YheA/YmcA/DUF963 family (controls sporulation, competence, biofilm development)
+92	101	COG4846	T	Regulator of biofilm dispersion, motility, and sporulation CcdC
+209	275	COG4862	K T N	Negative regulator MecA of genetic competence, sporulation and motility
+204	235	COG5018	T	3'-5' exonuclease KapD, inhibitor of KinA-controlled sporulation
+252	330	COG5801	D T	Stage 0 sporulation initiation regulator Spo0A (response regulator, REC-HTH domains)
+100	99	COG5802	D T	Stage 0 sporulation initiation phosphotransferase Spo0B
+257	406	COG5803	D T	Stage 0 sporulation initiation response regulator Spo0F
+152	437	COG5804	D T	Stage 0 sporulation regulatory phosphatase Spo0E
+42	58	COG5805	D T	Sporulation sensor histidine kinase A (Stage II sporulation protein SpoIIF/SpoIIJ)
+47	114	COG5806	D T	Sporulation sensor histidine kinase B
+20	20	COG5807	D T	Sporulation sensor histidine kinase C
+30	37	COG5808	D T	Sporulation sensor histidine kinase D
+1006	3435	COG5809	D T	Sporulation sensor histidine kinase E
+83	83	COG5810	D T	Sporulation protein KbaA, activator of histidine kinase KinB
+238	240	COG5811	K D	Sporulation sigma factor SigE (mother cell-specific, SpoIIGB)
+239	246	COG5812	K D	Sporulation sigma factor SigF (forespore-specific, SpoIIAC)
+235	242	COG5813	K D	Sporulation sigma factor SigG (forespore-specific, SpoIIIG)
+226	258	COG5814	K D	Sporulation sigma factor SigK (mother cell-specific, SpoIIIC/SpoIVCB)
+888	1775	COG5815	D T	Stage II sporulation protein SpoIIAA (anti-anti-sigma F factor), STAS domain
+116	120	COG5816	D	Stage II sporulation protein SpoIIB (spatial and temporal regulation of the dissolution of septal peptidoglycan during engulfment)
+382	496	COG5817	D	Stage II sporulation protein SpoIIE/SpoIIH (serine phosphatase - sigma-F activation)
+233	233	COG5818	K D O	Stage II sporulation protein SpoIIGA (protease, processing of pro-sigma-E to active sigma-E)
+233	328	COG5819	D	Stage II sporulation protein SpoIIP, required for dissolution of the septal cell wall
+100	100	COG5820	D	Stage II sporulation protein SpoIIQ, required for engulfement
+1226	2310	COG5821	D	Stage II sporulation protein SpoIIQ, clostridial version, metallopeptidase M23 family
+222	227	COG5822	D	Stage II sporulation protein SpoIIR, required for processing of pro-sigma-E
+213	213	COG5823	D	Stage III sporulation protein SpoIIIAB, component of the engulfment complex
+227	226	COG5824	D	Stage III sporulation protein SpoIIIAC, component of the engulfment complex
+220	219	COG5825	D	Stage III sporulation protein SpoIIIAD, component of the engulfment complex
+227	227	COG5826	D	Stage III sporulation protein SpoIIIAE, component of the engulfment complex
+204	204	COG5827	D	Stage III sporulation protein SpoIIIAF, component of the engulfment complex
+227	227	COG5828	D	Stage III sporulation protein SpoIIIAG, component of the engulfment complex
+239	239	COG5829	D	Stage III sporulation protein SpoIIIAH, component of the engulfment complex
+229	236	COG5830	K D	Stage III sporulation protein SpoIIID, transcriptional regulator of sigma-E- and sigma-K-dependent genes
+236	237	COG5831	D	Stage IV sporulation protein SpoIVA, required for spore cortex formation and coat assembly
+457	523	COG5832	D O	Stage IV sporulation protein SpoIVB, serine protease, degrades SpoIIQ, SpoIVFA
+137	137	COG5833	D	Stage IV sporulation protein SpoIVFA, regulates SpoIVFB
+104	104	COG5834	D E	Stage V sporulation protein SpoVAA, subunit of dipicolinate uptake complex
+103	103	COG5835	D E	Stage V sporulation protein SpoVAB, subunit of dipicolinate uptake complex
+237	276	COG5836	D E	Stage V sporulation protein SpoVAC, subunit of dipicolinate uptake complex
+234	275	COG5837	D E	Stage V sporulation protein SpoVAD, subunit of dipicolinate uptake complex
+82	80	COG5838	D	Stage V sporulation protein SpoVAEA, mutants lead to the production of immature spores
+236	271	COG5839	D E	Stage V sporulation protein SpoVAEB, subunit of dipicolinate uptake complex
+160	205	COG5840	D E	Stage V sporulation protein SpoVAF, subunit of dipicolinate uptake complex, GerA superfamily
+561	1022	COG5841	D	Stage V sporulation protein SpoVB/SpoIIIF, required for spore cortex synthesis
+185	190	COG5842	D E	Dipicolinate synthase subunit A (sporulation protein SpoVFA)
+188	191	COG5843	D E	Dipicolinate synthase subunit B (sporulation protein SpoVFB)
+72	70	COG5844	D	Stage V sporulation protein SpoVM, required for spore cortex and coat synthesis
+266	600	COG5845	K D	Stage V sporulation protein SpoVT, regulator of stationary/sporulation gene expression
+482	583	COG5846	D	Stage VI sporulation protein SpoVID (LysM domain), required for assembly of the spore coat
+76	88	COG5847	D	Stage VI sporulation protein SpoVIF, required for heat resistance
+67	133	COG5851	L D	Stage 0 sporulation inhibitor Sda, checkpoint for initiation of sporulation and replication
+133	143	COG5866	D O	Sporulation-specific protease YabG
+237	236	COG5868	D	Sporulation protein YabP
+41	40	COG5870	K D	Uncharacterized sporulation protein YbaK, contains DUF2521 domain (not related to E. coli deacylase YbaK, COG2606)
+236	238	COG5872	D	Stage IV sporulation protein YqfD
+64	63	COG5873	D	Sporulation forespore factor SpoIIIL/YqzE
+153	153	COG5874	D	Uncharacterized sporulation protein YtxC
+36	38	COG5876	S	Uncharacterized sporulation protein YozQ
+190	239	COG5878	D	Uncharacterized sporulation protein YyaC,contains DUF1256 domain
+201	241	COG5890	D	Uncharacterized sporulation proteins YjcM and YhbB, contain C-terminal amidase domain
+23	23	COG5895	D	Uncharacterized sporulation protein YpzA, contains DUF2564 domain
+53	53	COG5916	D	Uncharacterized sporulation protein YfkD
+53	53	COG5917	D	Uncharacterized sporulation protein YjbA, contains UPF0736/DUF3603 domain
+114	146	COG5918	D	Uncharacterized sporulation protein YmfJ, contains DUF3243 domain
+56	67	COG5919	D	Uncharacterized sporulation protein YodI
+54	53	COG5920	D	Uncharacterized sporulation protein YqfT, contains DUF2624 domain
+134	149	COG5921	D	Uncharacterized sporulation protein YqfX, contains DUF308 domain
+86	87	COG5922	D	Uncharacterized sporulation protein YqhG
+178	185	COG5923	D	Uncharacterized sporulation membrane protein YrzE, contains DUF3792 domain
+167	167	COG5924	D	Uncharacterized sporulation protein YtfI, contains DUF2953 domain
+103	102	COG5925	D	Uncharacterized sporulation membrane protein YtrH/SpoVIGA
+80	81	COG5926	D	Uncharacterized sporulation protein YtrI
+129	129	COG5928	D	Sporulation protein SpoIIT/YwmB, DUF1779 family

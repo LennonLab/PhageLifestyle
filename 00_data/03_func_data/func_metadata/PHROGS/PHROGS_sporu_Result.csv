@@ -1,0 +1,5 @@
+"#phrog","Domain","#MS","#colMSA","#prot","#annot","Phrog_annot","Phrog_cat","RefSeq","pfam","KEGG","GO"
+"phrog_10856","Bacteria:9","325","353","9","5","sporulation protein","moron, auxiliary metabolic gene and host takeover","sporulation protein YhbH [n=5]; hy…","PF04285.11&DUF444 ; Protein of…","K09786&K09786&uncharacteri…","GO:0030127 COPII vesicle coat !!!G…"
+"phrog_11726","Bacteria:9","114","115","9","4","sporulation stage III protein D","moron, auxiliary metabolic gene and host takeover","transcriptional regulator [n=3]; s…","PF07141.10&Phage_term_sma ; Pu…","K06283&spoIIID&putative De…","GO:0006310 DNA recombination !!!GO…"
+"phrog_16914","Bacteria:4;Archaea:1","200","228","5","4","sporulation protein","moron, auxiliary metabolic gene and host takeover","secreted LysM/SCP-PR1 domain prote…","PF00188.25&CAP ; Cysteine-rich…","NA","NA"
+"phrog_35646","Bacteria:2","93","93","2","2","sporulation protein","moron, auxiliary metabolic gene and host takeover","stage V sporulation protein S [n=1…","PF04232.11&SpoVS ; Stage V spo…","K06416&spoVS&stage V sporu…","NA"

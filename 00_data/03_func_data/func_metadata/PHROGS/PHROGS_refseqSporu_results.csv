@@ -1,0 +1,8 @@
+"#phrog","Domain","#MS","#colMSA","#prot","#annot","Phrog_annot","Phrog_cat","RefSeq","pfam","KEGG","GO"
+"phrog_938","Bacteria:156","2298","2409","156","97","endolysin","lysis","cell wall hydrolase [n=40]; hypoth…","PF00719.18&Pyrophosphatase ; I…","K01449&E3.5.1.28C, cwlJ, sleB&…","GO:0006508 proteolysis !!!GO:00044…"
+"phrog_2649","Bacteria:54","401","529","54","53","endolysin","lysis","lysin A [n=31]; endolysin [n=6]; p…","PF01427.16&Peptidase_M15 ; D-a…","K17733&cwlK&peptidoglycan …","GO:0008233 peptidase activity !!!G…"
+"phrog_6810","Bacteria:17","189","190","17","1","spore coat protein","head and packaging","hypothetical protein [n=1]; protei…","PF05263.10&DUF722 ; Protein of…","NA","NA"
+"phrog_8268","Bacteria:14","190","194","14","2","spore protease","other","hypothetical protein [n=2]; Spore …","PF06866.10&DUF1256 ; Protein o…","NA","GO:0009847 spore germination !!!GO…"
+"phrog_10367","Bacteria:10","145","152","10","5","NA","unknown function","small acid-soluble spore protein […","PF00269.19&SASP ; Small, acid-…","K06420&sspC&small acid-sol…","GO:0003690 double-stranded DNA bin…"
+"phrog_14642","Bacteria:7","215","222","7","7","endolysin","lysis","secreted N-acetylmuramyl-L-alanine…","PF07486.11&Hydrolase_2 ; Cell …","K01449&E3.5.1.28C, cwlJ, sleB&…","GO:0016787 hydrolase activity"
+"phrog_20780","Bacteria:4","117","118","4","1","NA","unknown function","hypothetical protein [n=3]; spore …","PF01476.19&LysM ; LysM domain&…","NA","NA"

@@ -1,0 +1,78 @@
+Organism	Protein	COG	Cat	Annotation
+516	552	COG0700	S	Spore maturation protein SpmB (function unknown)
+861	1574	COG1633	P	Rubrerythrin, includes spore coat protein YhjR
+273	322	COG1861	M	Spore coat polysaccharide biosynthesis protein SpsF, cytidylyltransferase family
+1180	2545	COG2132	D M P	Multicopper oxidase with three cupredoxin domains (includes cell division protein FtsP and spore coat protein CotA)
+1077	2077	COG2340	D R	Spore germination protein YkwD and related proteins with CAP (CSP/antigen 5/PR1) domain
+454	460	COG2715	R	Spore maturation protein SpmA (function unknown)
+572	587	COG2719	D	Stage V sporulation protein SpoVR/YcgB, involved in spore cortex formation (function unknown)
+1761	7055	COG2755	D I	Lysophospholipase L1 or related esterase. Includes spore coat protein LipC/YcsK
+391	594	COG3314	D E	Spore dipicolinate transporter SpoVV/YjiH/YlbJ, contains nucleoside recognition GATE domain
+435	620	COG3546	P	Mn-containing catalase (includes spore coat protein CotJC)
+526	1050	COG3773	D M	Cell wall hydrolase CwlJ, involved in spore germination
+453	884	COG3858	D	Spore cortex hydrolase SleL/YaaH, N-acetylglucosaminidase of GH18 family
+285	325	COG3874	D	Spore protein YtfJ/GerW, could be involved in germination
+347	376	COG3980	M	Spore coat polysaccharide biosynthesis protein SpsG, predicted glycosyltransferase
+462	858	COG4641	D	Spore maturation protein CgeB
+313	562	COG5337	M	Spore coat protein CotH
+360	447	COG5401	D	Spore germination protein GerM
+134	231	COG5577	M	Spore coat protein CotF
+239	246	COG5812	K D	Sporulation sigma factor SigF (forespore-specific, SpoIIAC)
+235	242	COG5813	K D	Sporulation sigma factor SigG (forespore-specific, SpoIIIG)
+236	237	COG5831	D	Stage IV sporulation protein SpoIVA, required for spore cortex formation and coat assembly
+82	80	COG5838	D	Stage V sporulation protein SpoVAEA, mutants lead to the production of immature spores
+561	1022	COG5841	D	Stage V sporulation protein SpoVB/SpoIIIF, required for spore cortex synthesis
+72	70	COG5844	D	Stage V sporulation protein SpoVM, required for spore cortex and coat synthesis
+482	583	COG5846	D	Stage VI sporulation protein SpoVID (LysM domain), required for assembly of the spore coat
+166	168	COG5848	D T	SigmaK-processing regulatory protein BofA (Bypass-of-forespore protein A)
+118	118	COG5849	D T	SigmaK checkpoint regulator BofC (Bypass-of-forespore protein C)
+98	191	COG5850	K D	Prespore-specific transcriptional regulator RsfA
+228	630	COG5852	D	Small acid-soluble spore protein SspA/SspB/SspC/SspD (alpha/beta-type)
+63	66	COG5853	D	Small acid-soluble spore protein SspE (gamma-type)
+138	141	COG5854	D	Small acid-soluble spore protein SspF (alpha/beta-type)
+95	135	COG5855	D	Small acid-soluble spore protein SspH/YfjU
+88	87	COG5856	D	Small acid-soluble spore protein SspI
+46	44	COG5857	D	Small acid-soluble spore protein SspK
+31	31	COG5858	D	Small acid-soluble spore protein SspL
+41	39	COG5859	D	Small acid-soluble spore protein SspN
+36	36	COG5860	D	Small acid-soluble spore protein SspO/CotK
+51	50	COG5861	D	Small acid-soluble spore protein SspP/CotL
+21	21	COG5862	D	Small acid-soluble spore protein CsgA
+90	90	COG5863	D	Small acid-soluble spore protein Tlp (thioredoxin-like protein)
+96	107	COG5864	D	Small acid-soluble spore protein SAS2, clostridial type
+110	110	COG5865	K D	Forespore-specific anti-sigma-G factor CsfB/Gin
+195	195	COG5869	D	Spore cortex formation membrane protein YabQ
+224	223	COG5871	D	Spore cortex protein YqfC, YabP family
+64	63	COG5873	D	Sporulation forespore factor SpoIIIL/YqzE
+56	72	COG5879	D	Spore coat protein CotD
+96	101	COG5880	D	Spore coat protein CotE
+219	381	COG5881	D	Spore coat protein CotI/CotS, protein kinase superfamily
+59	59	COG5882	D	Spore coat protein CotJA, required for the assembly of CotJC
+172	185	COG5883	D	Spore coat protein CotJB
+98	170	COG5884	D W	Biofilm matrix protein TasA/Spore protein CotN, contains M73-like domain
+37	39	COG5885	D	Spore coat protein CotO/YjbX
+35	56	COG5886	D	Spore coat protein CotV/CotX (outer spore coat)
+27	26	COG5887	D	Spore coat protein CotW (outer spore coat)
+43	67	COG5888	D	Spore coat protein CotY/CotZ (outer spore coat)
+122	135	COG5889	D	Spore coat protein GerQ/YwdL (inner spore coat)
+225	517	COG5891	D	Spore coat protein YheC/YheD, ATP-grasp superfamily
+58	58	COG5892	D	Spore coat protein YlbD, FlgN family
+64	69	COG5894	D	Spore coat protein YppG
+51	90	COG5896	D	Spore coat protein YraE/YraG
+79	81	COG5897	D	Spore coat protein YsxE, aminoglycoside phosphotransferase family
+36	37	COG5898	D	Spore coat protein YuzC (inner spore coat)
+25	48	COG5899	D	Spore coat protein YwqH
+105	212	COG5900	D	Spore coat protein YybI (inner spore coat)
+206	715	COG5901	D	Spore germination receptor GerABC, GerA subunit (L-alanine receptor)
+203	811	COG5902	D	Spore germination receptor GerABC, GerB subunit (amino acid transporter)
+205	753	COG5903	D	Spore germination receptor GerABC, GerC subunit
+90	91	COG5904	D	Spore germination receptor GerD
+968	2208	COG5905	K D	Spore transcriptional regulator GerE (stand-alone HTH domain)
+50	128	COG5906	D	Spore germination protein GerPA/GerPF (inner spore coat)
+45	45	COG5907	D	Spore germination protein GerPB, DUF2539 family (inner spore coat)
+48	50	COG5908	D	Spore germination protein GerPC (inner spore coat)
+44	44	COG5909	D	Spore germination protein GerPD (inner spore coat)
+43	43	COG5910	D	Spore germination protein GerPE (inner spore coat)
+234	235	COG5911	D	Spore germination protease Gpr
+135	327	COG5912	D	Spore cortex protein CoxA (YrbB), YhcN/YlaJ family
+162	186	COG5914	D	Spore germination protein YpeB, HAD superfamily, activates cortex-lytic enzyme SleB

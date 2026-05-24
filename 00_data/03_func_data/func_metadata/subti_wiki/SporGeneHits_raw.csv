@@ -1,0 +1,179 @@
+"","spor_gene_name","type","func"
+"1","abrB","transcriptional regulator","growth regulation"
+"58","amiC",NA,NA
+"83","apaH",NA,NA
+"366","appB",NA,NA
+"380","appF",NA,NA
+"381","apr",NA,NA
+"403","aprE","protease","protein degradation"
+"421","asnO",NA,NA
+"424","bdbC",NA,NA
+"430","blyA",NA,NA
+"646","cas7",NA,NA
+"649","cca",NA,NA
+"661","cDA1",NA,NA
+"670","citA",NA,NA
+"683","clpC",NA,NA
+"693","comP",NA,NA
+"697","cotA",NA,NA
+"698","cotH",NA,NA
+"709","cotJB",NA,NA
+"711","cotJC",NA,NA
+"763","cpdA",NA,NA
+"797","cry6Ba",NA,NA
+"799","cwlA",NA,NA
+"1084","cwlC","Lysin","Lysin"
+"1263","cwlD",NA,NA
+"1265","cwlH","Lysin","Lysin"
+"1527","cwlJ","Lysin","Spore coat"
+"1637","cwlK",NA,NA
+"1723","cysD",NA,NA
+"1888","cysE",NA,NA
+"1897","dacF",NA,NA
+"1907","dhhP",NA,NA
+"1910","dipeptidyl-peptidase 6 (EC 3.4.22.-) (Dipeptidyl-peptidase VI) (DPP VI) (Endopeptidase II) (Gamma-D-glutamyl-L-diamino acid endopeptidase II) (Gamma-D-glutamyl-MESO-diaminopimelate peptidase II)",NA,NA
+"1932","dnaX",NA,NA
+"1962","endoA",NA,NA
+"2028","exoA",NA,NA
+"2050","fabH",NA,NA
+"2060","ftsE",NA,NA
+"2076","ftsI",NA,NA
+"2077","ftsK",NA,NA
+"2198","gamma-D-glutamyl-L-diamino acid endopeptidase 1 (EC 3.4.19.11) (Endopeptidase I) (Gamma-D-glutamyl-L-diamino acid endopeptidase I) (Gamma-D-glutamyl-meso-diaminopimelate peptidase I)",NA,NA
+"2206","gerE",NA,NA
+"2209","gerPF",NA,NA
+"2215","glgA",NA,NA
+"2219","glgC",NA,NA
+"2223","glmS",NA,NA
+"2239","glnQ",NA,NA
+"2287","gumC",NA,NA
+"2305","htrC",NA,NA
+"2312","ibpA",NA,NA
+"2317","kamA",NA,NA
+"2319","katX",NA,NA
+"2321","kinB",NA,NA
+"2326","ldhA",NA,NA
+"2327","leuA",NA,NA
+"2331","lexA","transcriptional regulator","DNA repair"
+"2786","ligD",NA,NA
+"2814","lrp",NA,NA
+"2817","lysA",NA,NA
+"2821","lysM",NA,NA
+"2827","lysX",NA,NA
+"2879","lytA",NA,NA
+"4235","lytH",NA,NA
+"4238","marR",NA,NA
+"4262","mdfA","protein adaptor","protein degradation"
+"4284","meeY",NA,NA
+"4292","mgtA",NA,NA
+"4299","mreB",NA,NA
+"4312","mutT",NA,NA
+"4324","nadE",NA,NA
+"4340","nlpD",NA,NA
+"4472","nrnB",NA,NA
+"4488","nucB","DNA-modifying","DNA degradation"
+"4524","parA","DNA-modifying","Partitioning"
+"4847","parB","DNA-modifying","Partitioning"
+"5121","parS","DNA motif","Partitioning"
+"12734","pbpE",NA,NA
+"12745","pcrA",NA,NA
+"12767","pghL","Lysin","Lysin"
+"12938","pGRP",NA,NA
+"12984","pgu1",NA,NA
+"12998","phoP",NA,NA
+"13016","phoR",NA,NA
+"13033","pncA",NA,NA
+"13057","prkC",NA,NA
+"13112","rapA","transcriptional regulator","sporulation initiation"
+"13125","rapJ","transcriptional regulator","sporulation initiation"
+"13137","rfaJ",NA,NA
+"13139","rfbC",NA,NA
+"13142","rghR",NA,NA
+"13146","rhtB",NA,NA
+"13167","rnhA",NA,NA
+"13199","rpoD",NA,NA
+"13205","rseP",NA,NA
+"13206","rsfA","sigma factor regulator","sigma factor helper"
+"13211","rusA",NA,NA
+"13257","sigA","sigma factor regulator","sigma factor regulator"
+"13352","sigE",NA,NA
+"13404","sigF","sigma factor regulator","sigma factor regulator"
+"13497","sigG","sigma factor regulator","sigma factor regulator"
+"13571","sigH","sigma factor regulator","sigma factor regulator"
+"13606","sigK",NA,NA
+"13626","sleB",NA,NA
+"13633","sleL",NA,NA
+"13634","small, acid-soluble spore protein beta (ASSP) (SASP)",NA,NA
+"13637","smpB",NA,NA
+"13660","splB",NA,NA
+"13682","spo0A",NA,NA
+"13782","spo0E",NA,NA
+"13784","spo0J",NA,NA
+"13850","spoIIIAG",NA,NA
+"13851","spoIIID",NA,NA
+"13859","spoIIIE","DNA-modifying","Partitioning"
+"14008","spoIIQ","type iii secretion","Partitioning"
+"14020","spoIVCA","DNA-modifying","Partitioning"
+"15058","spoVAA",NA,NA
+"15059","spoVAEB",NA,NA
+"15070","spoVG","DNA-modifying","Partitioning"
+"15083","spoVK",NA,NA
+"15086","spoVS",NA,NA
+"15088","spoVT",NA,NA
+"15102","sprB",NA,NA
+"15107","spsI",NA,NA
+"15114","sspB","DNA-modifying","DNA processing"
+"15127","sspC","DNA-modifying","DNA processing"
+"15150","sspC1",NA,NA
+"15156","sspD",NA,NA
+"15160","sub1",NA,NA
+"15164","subtilisin BL (EC 3.4.21.62) (Alkaline protease)",NA,NA
+"15169","swsB",NA,NA
+"15174","tauA",NA,NA
+"15178","tauC",NA,NA
+"15190","tepA",NA,NA
+"15210","tesA",NA,NA
+"15295","trxA",NA,NA
+"15342","xlyA",NA,NA
+"15383","xlyB",NA,NA
+"15448","yaaH",NA,NA
+"15462","yajL",NA,NA
+"15471","yclG","Unknown","Unknown"
+"15593","yhaM",NA,NA
+"15606","yhbB","Lysin","Spore coat"
+"15624","yhbH","Unknown","Unknown"
+"15652","yhxC",NA,NA
+"15660","yitB","Metabolic","Sulfate reduction"
+"15956","yjbA","protein adaptor","protein degradation"
+"16007","ykoT",NA,NA
+"16009","ykoV",NA,NA
+"16012","ykwD",NA,NA
+"16018","ylaK","starvation protein","phosphate starvation protein"
+"16432","yloB",NA,NA
+"16466","yoaM","Unknown","Unknown"
+"16497","yoaW",NA,NA
+"16506","yokU",NA,NA
+"16507","yozE",NA,NA
+"16516","ypeP","Unknown","Unknown"
+"16579","yqaN","Unknown","Unknown"
+"16961","yqaO",NA,NA
+"16964","yqhH","DNA-modifying","DNA processing"
+"17039","yqhQ",NA,NA
+"17042","yqjB",NA,NA
+"17043","yrbD",NA,NA
+"17045","yrkC",NA,NA
+"17053","ytcA",NA,NA
+"17060","ytdA",NA,NA
+"17063","ytkC",NA,NA
+"17073","ytlA",NA,NA
+"17082","ytlC",NA,NA
+"17090","ytxC",NA,NA
+"17092","yugO",NA,NA
+"17121","yugT",NA,NA
+"17122","yuiC","RPF-like","Lysin"
+"17233","yutG",NA,NA
+"17253","ywjD",NA,NA
+"17262","ywqJ","Toxin","Toxin"
+"17286","yxjF",NA,NA
+"17291","yyaC",NA,NA
+"17298","yycO",NA,NA
